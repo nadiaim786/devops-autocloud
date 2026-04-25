@@ -9,16 +9,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Deploy to EC2
-  uses: appleboy/ssh-action@v1.0.3
-  with:
-    host: ${{ secrets.EC2_HOST }}
-    username: ubuntu
-    key: ${{ secrets.EC2_KEY }}
-        script: |
-          cd ~/devops-autocloud
-          git pull origin main
-          docker build -t autocloud-app .
-          docker stop app || true
-          docker rm app || true
-          docker run -d -p 80:3000 --name app autocloud-app
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd ~/devops-autocloud || git clone https://github.com/nadiaim786/devops-autocloud.git ~/devops-autocloud
+            cd ~/devops-autocloud
+
+            git pull origin main
+
+            docker build -t autocloud-app .
+
+            docker stop app || true
+            docker rm app || true
+
+            docker run -d -p 80:3000 --name app autocloud-app
