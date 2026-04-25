@@ -1,17 +1,17 @@
 script: |
+  set -e
+
   cd ~/devops-autocloud || git clone https://github.com/nadiaim786/devops-autocloud.git ~/devops-autocloud
   cd ~/devops-autocloud
 
   git pull origin main
 
+  # stop only your app container (safe)
   docker stop app || true
   docker rm app || true
 
-  # remove all old containers that might block port
-  docker stop $(docker ps -q) || true
-  docker rm $(docker ps -aq) || true
-
-  # IMPORTANT: correct Dockerfile path
+  # build from correct folder
   docker build -t autocloud-app ./app
 
+  # run safely on port 3001
   docker run -d -p 3001:3000 --name app autocloud-app
