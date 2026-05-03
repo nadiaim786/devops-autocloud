@@ -1,5 +1,4 @@
-# AutoCloud AI
-
+# AutoCloud A
 Autonomous Infrastructure 
 Features:
 - One-click deployment
